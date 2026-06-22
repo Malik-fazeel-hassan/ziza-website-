@@ -56,42 +56,49 @@ const SERVICES = [
     title: 'Visa Filing',
     description: 'Expert documentation and filing services for all visa categories with a proven track record of approvals.',
     color: 'from-blue-500/20 to-brand-navy-light',
+    key: 'visa-filing',
   },
   {
     icon: Building2,
     title: 'Accommodation',
     description: 'Premium hotel bookings and serviced apartments at competitive rates across all major destinations worldwide.',
     color: 'from-emerald-500/20 to-brand-navy-light',
+    key: 'accommodation',
   },
   {
     icon: CalendarCheck,
     title: 'Embassy Appointments',
     description: 'Fast-tracked embassy appointment scheduling with real-time slot monitoring and confirmation guarantees.',
     color: 'from-purple-500/20 to-brand-navy-light',
+    key: 'embassy-appointment',
   },
   {
     icon: Ticket,
     title: 'Airline Tickets',
     description: 'Best-price airline tickets on all major carriers with flexible booking options and 24/7 rebooking support.',
     color: 'from-rose-500/20 to-brand-navy-light',
+    key: 'airline-tickets',
   },
   {
     icon: MessageSquare,
     title: 'Visa Consultancy',
     description: 'One-on-one expert consultation on visa eligibility, document preparation, and interview coaching.',
     color: 'from-amber-500/20 to-brand-navy-light',
+    key: 'visa-consultancy',
   },
   {
     icon: Map,
     title: 'Custom Tours',
     description: 'Bespoke travel itineraries tailored to your preferences — from luxury getaways to adventure expeditions.',
     color: 'from-cyan-500/20 to-brand-navy-light',
+    key: 'custom-tour',
   },
   {
     icon: ShieldCheck,
     title: 'Travel Insurance',
     description: 'Comprehensive travel insurance covering medical emergencies, trip cancellation, and lost baggage globally.',
     color: 'from-orange-500/20 to-brand-navy-light',
+    key: 'travel-insurance',
   },
 ];
 
@@ -144,48 +151,54 @@ const VISA_TABS = [
 
 const DESTINATIONS = [
   {
-    name: 'London',
-    country: 'United Kingdom',
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80',
-    tag: 'Most Popular',
+    name: 'Toronto',
+    country: 'Canada',
+    image: 'https://images.unsplash.com/photo-1507992781348-310259076fe0?w=800&q=80',
+    tag: 'Study & Work',
+    description: 'Canada’s financial and cultural powerhouse, offering premier universities and incredible career opportunities for students and professionals.',
   },
   {
     name: 'Dubai',
     country: 'United Arab Emirates',
     image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
     tag: 'Trending',
+    description: 'A global business hub and luxury travel destination, famous for its futuristic architecture, tax-free income, and high standard of living.',
   },
   {
-    name: 'Toronto',
+    name: 'Vancouver',
     country: 'Canada',
-    image: 'https://images.unsplash.com/photo-1517090504332-edc2772b0e4d?w=800&q=80',
-    tag: 'Study Abroad',
+    image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&q=80',
+    tag: 'Most Popular',
+    description: 'Renowned for its breathtaking natural landscapes, thriving tech industry, and high quality of life, bridging ocean shores and mountains.',
   },
   {
     name: 'Istanbul',
     country: 'Turkey',
     image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=80',
     tag: 'Cultural',
+    description: 'A captivating historical metropolis bridging Europe and Asia, featuring gorgeous architecture, rich heritage, and vibrant local markets.',
   },
   {
     name: 'Sydney',
     country: 'Australia',
     image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80',
     tag: 'Adventure',
+    description: 'Boasting the iconic Opera House, pristine sunny beaches, and a booming job market, it is a prime choice for work and student immigration.',
   },
   {
     name: 'Paris',
     country: 'France',
     image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80',
-    tag: 'Romantic',
+    tag: 'Schengen Gate',
+    description: 'The cultural center of Europe and key gateway to the Schengen zone, offering exceptional tourism and globally recognized education.',
   },
 ];
 
 const TESTIMONIALS = [
   {
     name: 'Ahmed Khan',
-    role: 'Student Visa — UK',
-    text: 'ZIZA made my dream of studying in London a reality. From university selection to visa approval, they handled everything flawlessly. Highly recommended!',
+    role: 'Student Visa — Canada',
+    text: 'ZIZA made my dream of studying in Toronto a reality. From university selection to visa approval, they handled everything flawlessly. Highly recommended!',
     rating: 5,
   },
   {
@@ -336,9 +349,11 @@ interface FormData {
 function ConsultationModal({
   isOpen,
   onClose,
+  initialService,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  initialService: string;
 }) {
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -382,11 +397,13 @@ function ConsultationModal({
   };
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      setFormData((prev) => ({ ...prev, service: initialService }));
+    } else {
       setStatus('idle');
       setErrorMsg('');
     }
-  }, [isOpen]);
+  }, [isOpen, initialService]);
 
   return (
     <AnimatePresence>
@@ -484,6 +501,7 @@ function ConsultationModal({
                   <option value="" disabled className="text-white/40">
                     Select a Service
                   </option>
+                  <option value="visa-filing">Visa Filing</option>
                   <option value="visit-visa">Visit Visa</option>
                   <option value="student-visa">Student Visa</option>
                   <option value="work-visa">Work Visa</option>
@@ -588,9 +606,15 @@ function AnimatedSection({
 export default function HomePage() {
   const [isMounted, setIsMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeVisaTab, setActiveVisaTab] = useState('visit');
   const [scrolled, setScrolled] = useState(false);
+
+  const openModalWithService = (serviceKey: string) => {
+    setSelectedService(serviceKey);
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -653,7 +677,7 @@ export default function HomePage() {
                 </a>
               ))}
               <button
-                onClick={() => setModalOpen(true)}
+                onClick={() => openModalWithService('')}
                 className="px-5 py-2.5 rounded-lg bg-brand-gold text-brand-navy font-bold text-sm hover:bg-brand-gold-light transition-all gold-glow-hover uppercase tracking-wider"
               >
                 Free Consultancy
@@ -694,7 +718,7 @@ export default function HomePage() {
                 ))}
                 <button
                   onClick={() => {
-                    setModalOpen(true);
+                    openModalWithService('');
                     setMobileMenuOpen(false);
                   }}
                   className="w-full mt-4 px-5 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold text-sm hover:bg-brand-gold-light transition-all uppercase tracking-wider"
@@ -761,7 +785,7 @@ export default function HomePage() {
             transition={{ duration: 1, delay: 0.9 }}
           >
             <button
-              onClick={() => setModalOpen(true)}
+              onClick={() => openModalWithService('')}
               className="group px-8 py-4 rounded-xl bg-brand-gold text-brand-navy font-bold text-lg hover:bg-brand-gold-light transition-all gold-glow-hover flex items-center justify-center gap-2"
             >
               Get Free Consultancy
@@ -838,6 +862,7 @@ export default function HomePage() {
             {SERVICES.map((service, i) => (
               <motion.div
                 key={service.title}
+                onClick={() => openModalWithService(service.key)}
                 className={`service-card rounded-2xl bg-gradient-to-br ${service.color} border border-white/5 p-6 cursor-pointer ${
                   i === 6 ? 'sm:col-span-2 lg:col-span-1' : ''
                 }`}
@@ -940,7 +965,7 @@ export default function HomePage() {
                 </ul>
 
                 <button
-                  onClick={() => setModalOpen(true)}
+                  onClick={() => openModalWithService(activeVisa.id + '-visa')}
                   className="mt-8 px-6 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold hover:bg-brand-gold-light transition-all flex items-center gap-2"
                 >
                   Apply Now
@@ -1026,10 +1051,13 @@ export default function HomePage() {
                     <h3 className="text-2xl font-serif font-bold text-white mb-1">
                       {dest.name}
                     </h3>
-                    <div className="flex items-center gap-2 text-white/70 text-sm">
+                    <div className="flex items-center gap-2 text-white/70 text-sm mb-2">
                       <MapPin size={14} />
                       {dest.country}
                     </div>
+                    <p className="text-white/60 text-xs line-clamp-2 mb-3 group-hover:line-clamp-none transition-all duration-300">
+                      {dest.description}
+                    </p>
                     <div className="mt-3 flex items-center gap-1 text-brand-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <span>Explore</span>
                       <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -1114,7 +1142,7 @@ export default function HomePage() {
               Your dream destination is just a conversation away.
             </p>
             <button
-              onClick={() => setModalOpen(true)}
+              onClick={() => openModalWithService('')}
               className="px-10 py-4 rounded-xl bg-brand-navy text-white font-bold text-lg hover:bg-brand-navy-light transition-all shadow-xl shadow-brand-navy/20 flex items-center gap-2 mx-auto group"
             >
               <Phone size={20} />
@@ -1261,7 +1289,7 @@ export default function HomePage() {
               </ul>
 
               <button
-                onClick={() => setModalOpen(true)}
+                onClick={() => openModalWithService('')}
                 className="mt-6 w-full px-4 py-3 rounded-lg bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-semibold text-sm hover:bg-brand-gold hover:text-brand-navy transition-all flex items-center justify-center gap-2"
               >
                 <Heart size={16} />
@@ -1290,7 +1318,7 @@ export default function HomePage() {
       {/* ============================================================
           CONSULTATION MODAL
           ============================================================ */}
-      <ConsultationModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <ConsultationModal isOpen={modalOpen} onClose={() => setModalOpen(false)} initialService={selectedService} />
     </main>
   );
 }

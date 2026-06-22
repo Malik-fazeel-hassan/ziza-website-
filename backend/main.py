@@ -103,6 +103,7 @@ class InquiryForm(BaseModel):
     @classmethod
     def validate_service(cls, v: str) -> str:
         valid_services = {
+            "visa-filing",
             "visit-visa",
             "student-visa",
             "work-visa",
