@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === 'production';
-const repoName = process.env.NEXT_PUBLIC_REPO_NAME || 'ziza';
+const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
+const repoName = process.env.NEXT_PUBLIC_REPO_NAME || 'ziza-website-';
 
 const nextConfig = {
   output: 'export',
-  basePath: isProd ? `/${repoName}` : '',
-  assetPrefix: isProd ? `/${repoName}/` : '',
+  basePath: isGithubActions ? `/${repoName}` : '',
+  assetPrefix: isGithubActions ? `/${repoName}/` : '',
   images: {
     unoptimized: true,
   },
