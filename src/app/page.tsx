@@ -100,7 +100,7 @@ const VISA_TABS = [
     id: 'visit',
     label: 'Visit Visas',
     icon: Eye,
-    countries: ['United Kingdom', 'United States', 'Canada', 'Australia', 'Schengen Zone', 'UAE', 'Turkey', 'Malaysia'],
+    countries: ['Canada', 'Australia', 'Schengen Zone', 'UAE', 'Turkey'],
     description: 'Tourist and visitor visas for leisure travel, family visits, and short-term stays worldwide.',
     features: [
       'Complete document checklist guidance',
@@ -115,7 +115,7 @@ const VISA_TABS = [
     id: 'student',
     label: 'Student Visas',
     icon: GraduationCap,
-    countries: ['United Kingdom', 'United States', 'Canada', 'Australia', 'Germany', 'Ireland', 'New Zealand', 'Italy'],
+    countries: ['Canada', 'Australia', 'Germany', 'Ireland', 'New Zealand', 'Italy'],
     description: 'Full-service student visa support from university selection through to post-arrival settlement.',
     features: [
       'University admission guidance',
@@ -130,13 +130,12 @@ const VISA_TABS = [
     id: 'work',
     label: 'Work Visas',
     icon: Briefcase,
-    countries: ['United Kingdom', 'Canada', 'Australia', 'Germany', 'UAE', 'Qatar', 'Saudi Arabia', 'Oman'],
+    countries: ['Canada', 'Australia', 'Germany', 'UAE', 'Qatar', 'Saudi Arabia', 'Oman'],
     description: 'Professional work permit and skilled worker visa processing with employer liaison services.',
     features: [
       'Employer sponsorship guidance',
-      'Skills assessment assistance',
-      'Professional credential evaluation',
       'Labour market impact assessment',
+      'Professional credential evaluation',
       'Family dependent visa processing',
       'Post-landing settlement support',
     ],

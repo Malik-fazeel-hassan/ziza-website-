@@ -1,25 +1,16 @@
-"""
-ZIZA Travel & Tours — Lead Processing Backend
-FastAPI server that handles contact form submissions from the static Next.js frontend.
-
-Run with: uvicorn main:app --reload --host 0.0.0.0 --port 8000
-"""
-
+import csv
+import os
 import re
 import logging
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
-
-# ──────────────────────────────────────────────
-# Logging Configuration
-# ──────────────────────────────────────────────
 
 logging.basicConfig(
     level=logging.INFO,
@@ -259,6 +250,45 @@ async def health_check():
     }
 
 
+CSV_FILE_PATH = "inquiries.csv"
+
+
+def save_to_csv(inquiry: InquiryForm, reference_id: str, timestamp: str) -> bool:
+    """
+    Appends the inquiry details to a local CSV file (spreadsheet).
+    Creates the file and writes the headers if it doesn't exist.
+    """
+    file_exists = os.path.exists(CSV_FILE_PATH)
+    try:
+        with open(CSV_FILE_PATH, mode="a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                # Write header row compatible with Excel / Google Sheets
+                writer.writerow([
+                    "Reference ID", 
+                    "Timestamp", 
+                    "Name", 
+                    "Email", 
+                    "Phone", 
+                    "Service", 
+                    "Message"
+                ])
+            writer.writerow([
+                reference_id,
+                timestamp,
+                inquiry.name,
+                inquiry.email,
+                inquiry.phone,
+                inquiry.service,
+                inquiry.message or ""
+            ])
+        logger.info(f"Successfully saved lead {reference_id} to CSV: {CSV_FILE_PATH}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to save lead {reference_id} to CSV: {e}")
+        return False
+
+
 @app.post(
     "/api/submit-inquiry",
     response_model=InquiryResponse,
@@ -285,6 +315,9 @@ async def submit_inquiry(inquiry: InquiryForm):
     logger.info(f"  Service: {inquiry.service}")
     logger.info(f"  Message: {inquiry.message[:100]}{'...' if inquiry.message and len(inquiry.message) > 100 else ''}")
     logger.info("=" * 60)
+
+    # Save lead details to CSV file (Excel-compatible spreadsheet)
+    save_to_csv(inquiry, reference_id, timestamp.isoformat())
 
     # Attempt email notification
     email_sent = send_email_notification(inquiry, reference_id)
