@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://malik-fazeel-hassan.github.io/ziza-website-/sitemap.xml
