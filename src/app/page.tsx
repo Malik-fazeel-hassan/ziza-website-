@@ -1180,21 +1180,27 @@ export default function HomePage() {
               </p>
               <div className="flex gap-3">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/share/1QAt7BmG31/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-brand-gold hover:border-brand-gold/30 transition-all"
                   aria-label="Facebook"
                 >
                   <Facebook size={18} />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/zizatravelandtours?igsh=OWxydXE2OWlwdHVs"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-brand-gold hover:border-brand-gold/30 transition-all"
                   aria-label="Instagram"
                 >
                   <Instagram size={18} />
                 </a>
                 <a
-                  href="#"
+                  href="https://x.com/ZizaTravels"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-brand-gold hover:border-brand-gold/30 transition-all"
                   aria-label="Twitter"
                 >
